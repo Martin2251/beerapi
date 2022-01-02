@@ -1,23 +1,36 @@
-import logo from './logo.svg';
+import {useState} from "react"
 import './App.css';
+import axios from "axios";
 
 function App() {
+  const [beerList, setBeerList] = useState([])
+
+  const getBeers = (e) => {
+    e.preventDefault();
+  };
+
+  axios
+  .get("https://api.punkapi.com/v2/beers")
+
+  .then((res) => setBeerList(res.data))
+  .catch((err) => console.log(err));
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Beer aop </h1>
+    <button onClick={getBeers}>Get all beers</button>
+
+    {
+      beerList.length >=1 ? beerList.map((beer, idx) => {
+        return <><p key ={idx}>{beer.name}</p>
+        <p>{beer.abv}</p>
+        <p>{beer.boil_volume.value}</p>
+        <p>{beer.brewers_tips}</p>
+        </> 
+      })
+      : ""
+    }
     </div>
   );
 }
